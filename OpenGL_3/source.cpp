@@ -64,6 +64,7 @@ int main() {
 	// fragment shader compilation
 	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+	glCompileShader(fragmentShader);
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
@@ -86,7 +87,7 @@ int main() {
 
 	float vertices[] = {
 		-0.5f, -0.5f, 0.0f,
-		0.0f, 1.0f, 0.0f,
+		0.0f, 0.5f, 0.0f,
 		0.5f, -0.5f, 0.0f
 	};
 
@@ -107,6 +108,9 @@ int main() {
 
 	while (!glfwWindowShouldClose(window)) {
 		processInput(window);
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
