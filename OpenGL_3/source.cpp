@@ -8,6 +8,12 @@ const int HEIGHT = 600;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
+const char* vertexShaderSource = "#version 330 core\n"
+								"layout (location = 0) in vec3 aPos;\n"
+								"void main(){\n"
+								"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+								"}\0";
+
 int main() {
 	if (!glfwInit()) {
 		std::cerr << "GLFW initialization failed" << std::endl;
@@ -33,6 +39,21 @@ int main() {
 		glfwTerminate();
 		return -1;
 	}
+
+	// shader compilation error check
+	int success;
+	char infoLog[512];
+
+	// vertex shader compilation
+	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	glCompileShader(vertexShader);
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+	if (!success) {
+		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+		std::cerr << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
 
 	while (!glfwWindowShouldClose(window)) {
 
