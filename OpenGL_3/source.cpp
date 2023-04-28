@@ -7,7 +7,7 @@ const int WIDTH = 800;
 const int HEIGHT = 600;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput();
+void processInput(GLFWwindow* window);
 
 const char* vertexShaderSource = "#version 330 core\n"
 								"layout (location = 0) in vec3 aPos;\n"
@@ -19,7 +19,7 @@ const char* fragmentShaderSource = "#version 330 core\n"
 								"out vec4 FragColor;\n"
 								"void main(){\n"
 								"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-								"}\0";
+								"}\n\0";
 
 int main() {
 	if (!glfwInit()) {
@@ -106,7 +106,14 @@ int main() {
 	glBindVertexArray(0);
 
 	while (!glfwWindowShouldClose(window)) {
-		processInput();
+		processInput(window);
+
+		glUseProgram(shaderProgram);
+		glBindVertexArray(VAO);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+		
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 
 	glfwTerminate();
@@ -117,6 +124,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
-void processInput() {
+void processInput(GLFWwindow* window) {
 
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		glfwSetWindowShouldClose(window, true);
+	}
 }
